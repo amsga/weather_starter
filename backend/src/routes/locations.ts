@@ -5,6 +5,7 @@ import {
   getLocation,
   listLocations,
   updateWeather,
+  deleteLocation,
 } from '../db.js';
 import { SingaporeWeatherClient, WeatherProviderError, type WeatherSnapshot } from '../weather.js';
 import { logger } from '../logger.js';
@@ -25,6 +26,22 @@ export function createLocationsRouter(options: LocationsRouterOptions = {}): Rou
   router.get('/locations', async (_request, response, next) => {
     try {
       response.json({ locations: await listLocations() });
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  router.delete('/locations/:locationId', async (request, response, next) => {
+    try {
+      const locationId = Number(request.params.locationId);
+      const location = await getLocation(locationId);
+      if (!location) {
+        response.status(404).json({ detail: 'Location not found' });
+        return;
+      }
+      // delete and return no content
+      await deleteLocation(locationId);
+      response.status(204).send();
     } catch (error) {
       next(error);
     }

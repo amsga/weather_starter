@@ -71,6 +71,28 @@ export function StoreProvider({ children }: ProviderProps) {
     [load],
   );
 
+  const remove = useCallback(
+    async (id: number) => {
+      setError(null);
+      logInteraction('location_delete_submitted', { locationId: id });
+      try {
+        await fetch(`/api/locations/${id}`, { method: 'DELETE' });
+        const next = await load();
+        // if deleted location was selected, clear selection (effectiveSelectedId will handle)
+        if (selectedId === id) setSelectedId(null);
+        logInteraction('location_deleted', { locationId: id });
+      } catch (err) {
+        setError(err);
+        logInteraction('location_delete_failed', {
+          locationId: id,
+          error: err instanceof Error ? err.message : 'Unknown error',
+        });
+        throw err;
+      }
+    },
+    [load, selectedId],
+  );
+
   const refresh = useCallback(
     async (id: number) => {
       setRefreshingId(id);
@@ -107,6 +129,8 @@ export function StoreProvider({ children }: ProviderProps) {
     },
     create,
     refresh,
+    // @ts-expect-error extend at runtime
+    delete: remove,
   };
 
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>;
