@@ -151,7 +151,7 @@ export interface DailyForecast {
 
 export interface WeatherSnapshot {
   condition: string;
-  observed_at: string;
+  observed_at: string | null;
   source: string;
   area: string | null;
   valid_period_text: string | null;
@@ -181,10 +181,74 @@ export class SingaporeWeatherClient {
   ) {}
 
   async getCurrentWeather(latitude: number, longitude: number): Promise<WeatherSnapshot> {
-    const forecastPayload = await this.fetchLatestForecastPayload().catch(() => null);
-    return forecastPayload
+    const forecastPayload = await this.fetchLatestForecastPayload().catch((error) => {
+      if (error instanceof WeatherProviderError) return null;
+      throw error;
+    });
+    const baseSnapshot = forecastPayload
       ? this.snapshotFromPayload(forecastPayload, latitude, longitude)
       : this.emptyForecastSnapshot();
+
+    const [
+      temperatureResult,
+      humidityResult,
+      rainfallResult,
+      windSpeedResult,
+      windDirectionResult,
+      uvResult,
+      airQualityResult,
+      twentyFourHourResult,
+      fourDayResult,
+    ] = await Promise.allSettled([
+      this.fetchNearestReading('air-temperature', latitude, longitude),
+      this.fetchNearestReading('relative-humidity', latitude, longitude),
+      this.fetchNearestReading('rainfall', latitude, longitude),
+      this.fetchNearestReading('wind-speed', latitude, longitude),
+      this.fetchNearestReading('wind-direction', latitude, longitude),
+      this.fetchUvIndex(),
+      this.fetchAirQuality(latitude, longitude),
+      this.fetchTwentyFourHourForecast(latitude, longitude),
+      this.fetchFourDayForecast(),
+    ]);
+
+    const temperature = fulfilledValue(temperatureResult);
+    const humidity = fulfilledValue(humidityResult);
+    const rainfall = fulfilledValue(rainfallResult);
+    const windSpeed = fulfilledValue(windSpeedResult);
+    const windDirection = fulfilledValue(windDirectionResult);
+    const uv = fulfilledValue(uvResult);
+    const airQuality = fulfilledValue(airQualityResult);
+    const twentyFourHour = fulfilledValue(twentyFourHourResult);
+    const fourDay = fulfilledValue(fourDayResult);
+
+    return {
+      ...baseSnapshot,
+      observed_at: latestTimestamp([
+        baseSnapshot.observed_at,
+        temperature?.timestamp ?? null,
+        humidity?.timestamp ?? null,
+        rainfall?.timestamp ?? null,
+        windSpeed?.timestamp ?? null,
+        windDirection?.timestamp ?? null,
+        uv?.timestamp ?? null,
+        airQuality?.timestamp ?? null,
+        twentyFourHour?.timestamp ?? null,
+        fourDay?.timestamp ?? null,
+      ]),
+      temperature_c: temperature?.value ?? null,
+      humidity_percent: humidity?.value ?? null,
+      rainfall_mm: rainfall?.value ?? null,
+      wind_speed_knots: windSpeed?.value ?? null,
+      wind_direction_degrees: windDirection?.value ?? null,
+      forecast_low_c: twentyFourHour?.low ?? null,
+      forecast_high_c: twentyFourHour?.high ?? null,
+      uv_index: uv?.value ?? null,
+      psi_twenty_four_hourly: airQuality?.psi ?? null,
+      pm25_one_hourly: airQuality?.pm25 ?? null,
+      air_quality_region: airQuality?.region ?? null,
+      forecast_periods: twentyFourHour?.periods ?? [],
+      daily_forecast: fourDay?.days ?? [],
+    };
   }
 
   async fetchLatestForecastPayload(): Promise<ForecastPayload> {
@@ -544,6 +608,10 @@ function latestTimestamp(timestamps: Array<string | null>): string | null {
       .filter((timestamp): timestamp is string => Boolean(timestamp))
       .sort((a, b) => new Date(b).getTime() - new Date(a).getTime())[0] ?? null
   );
+}
+
+function fulfilledValue<T>(result: PromiseSettledResult<T>): T | null {
+  return result.status === 'fulfilled' ? result.value : null;
 }
 
 function numberOrNull(value: number | string | undefined): number | null {

@@ -129,7 +129,6 @@ export function StoreProvider({ children }: ProviderProps) {
     },
     create,
     refresh,
-    // @ts-expect-error extend at runtime
     delete: remove,
   };
 

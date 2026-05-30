@@ -20,6 +20,8 @@ export function SidebarCard({ location, isHome }: SidebarCardProps) {
   const temperature = formatTemperature(location.weather.temperature_c);
   const high = formatTemperature(location.weather.forecast_high_c);
   const low = formatTemperature(location.weather.forecast_low_c);
+  const humidity = formatPercent(location.weather.humidity_percent);
+  const rainfall = formatRainfall(location.weather.rainfall_mm);
 
   const onSelect = () => select(location.id);
   const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
@@ -81,15 +83,29 @@ export function SidebarCard({ location, isHome }: SidebarCardProps) {
           </button>
         </div>
       </div>
-      <div className="mt-3 flex items-center justify-between border-t border-white/10 px-4 py-2 text-xs">
-        <div className="flex items-center gap-2 text-white/80">
-          <CloudIcon className="h-4 w-4 text-white/70" />
-          <span>{condition}</span>
+      <div className="mt-3 border-t border-white/10 px-4 py-2 text-xs">
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex min-w-0 items-center gap-2 text-white/80">
+            <CloudIcon className="h-4 w-4 shrink-0 text-white/70" />
+            <span className="truncate">{condition}</span>
+          </div>
+          <div className="shrink-0 text-white/60 tabular-nums">
+            H:{high} L:{low}
+          </div>
         </div>
-        <div className="text-white/60 tabular-nums">
-          H:{high} L:{low}
+        <div className="mt-2 flex items-center gap-3 text-[11px] text-white/60">
+          <span>Humidity {humidity}</span>
+          <span>Rain {rainfall}</span>
         </div>
       </div>
     </div>
   );
+}
+
+function formatPercent(value: number | null): string {
+  return typeof value === 'number' && Number.isFinite(value) ? `${Math.round(value)}%` : '--';
+}
+
+function formatRainfall(value: number | null): string {
+  return typeof value === 'number' && Number.isFinite(value) ? `${value.toFixed(1)} mm` : '--';
 }
