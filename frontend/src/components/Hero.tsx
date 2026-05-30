@@ -1,13 +1,33 @@
+import { useEffect, useState } from 'react';
 import { useStore, useSelectedLocation } from '../state/store';
 import { LocationIcon, RefreshIcon } from './icons';
 import { HourlyStrip } from './HourlyStrip';
 import { TenDayForecast } from './TenDayForecast';
 import { TileGrid } from './Tiles';
 import { formatTemperature, formatTime } from './format';
+import { WeatherMapCard } from './WeatherMapCard';
 
 export function Hero() {
-  const { locations, refresh, refreshingId } = useStore();
+  const { locations, refresh, refreshingId, select, selectedId } = useStore();
   const selected = useSelectedLocation();
+  const [isMapExpanded, setIsMapExpanded] = useState(false);
+
+  useEffect(() => {
+    if (!isMapExpanded) return;
+
+    const previousOverflow = document.body.style.overflow;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setIsMapExpanded(false);
+    };
+
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', onKeyDown);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener('keydown', onKeyDown);
+    };
+  }, [isMapExpanded]);
 
   if (!selected) {
     return (
@@ -63,6 +83,14 @@ export function Hero() {
 
         <HourlyStrip periods={selected.weather?.forecast_periods} />
         <TenDayForecast weather={selected.weather} />
+        <WeatherMapCard
+          locations={locations}
+          selectedId={selectedId}
+          onSelect={(id) => select(id)}
+          isExpanded={isMapExpanded}
+          onExpand={() => setIsMapExpanded(true)}
+          onClose={() => setIsMapExpanded(false)}
+        />
         <TileGrid weather={selected.weather} />
 
         <footer className="mt-2 flex flex-col items-center gap-3 pb-8 text-xs text-white/55">
