@@ -8,12 +8,92 @@ body,
   height: 100%;
 }
 
+html {
+  --bg-1: rgba(255, 255, 255, 0.18);
+  --bg-2: rgba(80, 110, 150, 0.55);
+  --bg-3: #6f8aa8;
+  --bg-4: #5a7591;
+  --bg-5: #4a627c;
+  --bg-6: #3c5066;
+  --focus-ring: rgba(255, 255, 255, 0.4);
+}
+
+html[data-theme='apple'] {
+  --bg-1: rgba(255, 255, 255, 0.18);
+  --bg-2: rgba(80, 110, 150, 0.55);
+  --bg-3: #6f8aa8;
+  --bg-4: #5a7591;
+  --bg-5: #4a627c;
+  --bg-6: #3c5066;
+  --focus-ring: rgba(255, 255, 255, 0.4);
+}
+
+html[data-theme='midnight'] {
+  --bg-1: rgba(0, 229, 255, 0.08);
+  --bg-2: rgba(12, 18, 36, 0.86);
+  --bg-3: #09101d;
+  --bg-4: #060b16;
+  --bg-5: #020611;
+  --bg-6: #010308;
+  --focus-ring: rgba(0, 229, 255, 0.5);
+}
+
+html[data-theme='aurora'] {
+  --bg-1: rgba(255, 255, 255, 0.14);
+  --bg-2: rgba(77, 204, 214, 0.42);
+  --bg-3: #5b7caa;
+  --bg-4: #49698d;
+  --bg-5: #34526d;
+  --bg-6: #253c57;
+  --focus-ring: rgba(152, 255, 240, 0.45);
+}
+
+html[data-theme='sunlit'] {
+  --bg-1: rgba(255, 255, 255, 0.22);
+  --bg-2: rgba(236, 183, 91, 0.48);
+  --bg-3: #f2efe8;
+  --bg-4: #e2dccf;
+  --bg-5: #cdbfa6;
+  --bg-6: #a98f6f;
+  --focus-ring: rgba(244, 176, 76, 0.45);
+}
+
+html[data-theme='glass-coast'] {
+  --bg-1: rgba(255, 255, 255, 0.2);
+  --bg-2: rgba(127, 198, 226, 0.42);
+  --bg-3: #7ea0ba;
+  --bg-4: #67839b;
+  --bg-5: #4e6a82;
+  --bg-6: #344a5f;
+  --focus-ring: rgba(173, 226, 244, 0.48);
+}
+
+html[data-theme='nordic-calm'] {
+  --bg-1: rgba(255, 255, 255, 0.16);
+  --bg-2: rgba(171, 183, 197, 0.44);
+  --bg-3: #f6f7f8;
+  --bg-4: #e4eaee;
+  --bg-5: #c9d3da;
+  --bg-6: #9fb0bc;
+  --focus-ring: rgba(149, 179, 197, 0.45);
+}
+
+html[data-theme='solar-pulse'] {
+  --bg-1: rgba(255, 255, 255, 0.22);
+  --bg-2: rgba(255, 177, 72, 0.52);
+  --bg-3: #fff4dc;
+  --bg-4: #ffd99e;
+  --bg-5: #f7b860;
+  --bg-6: #e98a39;
+  --focus-ring: rgba(255, 178, 72, 0.5);
+}
+
 body {
   @apply text-white antialiased;
   background:
-    radial-gradient(120% 80% at 70% 0%, rgba(255, 255, 255, 0.18) 0%, transparent 55%),
-    radial-gradient(90% 70% at 10% 100%, rgba(80, 110, 150, 0.55) 0%, transparent 60%),
-    linear-gradient(170deg, #6f8aa8 0%, #5a7591 35%, #4a627c 65%, #3c5066 100%);
+    radial-gradient(120% 80% at 70% 0%, var(--bg-1) 0%, transparent 55%),
+    radial-gradient(90% 70% at 10% 100%, var(--bg-2) 0%, transparent 60%),
+    linear-gradient(170deg, var(--bg-3) 0%, var(--bg-4) 35%, var(--bg-5) 65%, var(--bg-6) 100%);
   background-attachment: fixed;
   background-repeat: no-repeat;
 }
@@ -26,6 +106,7 @@ input {
 button:focus-visible,
 input:focus-visible {
   @apply outline-none ring-2 ring-white/40 ring-offset-0;
+  box-shadow: 0 0 0 2px var(--focus-ring);
 }
 
 ::-webkit-scrollbar {
@@ -72,6 +153,273 @@ input:focus-visible {
 
 .weather-map .leaflet-pane {
   filter: saturate(1.08) contrast(0.98);
+}
+
+html[data-theme='midnight'] body {
+  color: rgba(237, 250, 255, 0.96);
+}
+
+html[data-theme='aurora'] body {
+  color: rgba(235, 255, 249, 0.97);
+}
+
+html[data-theme='sunlit'] body {
+  color: rgba(58, 39, 18, 0.97);
+}
+
+html[data-theme='glass-coast'] body {
+  color: rgba(236, 250, 255, 0.97);
+}
+
+html[data-theme='nordic-calm'] body {
+  color: rgba(37, 50, 61, 0.98);
+}
+
+html[data-theme='solar-pulse'] body {
+  color: rgba(61, 29, 6, 0.98);
+}
+
+html[data-theme='midnight'] .weather-map .leaflet-control-attribution,
+html[data-theme='midnight'] .weather-map .leaflet-control-zoom a {
+  background: rgba(2, 6, 23, 0.72);
+  color: rgba(209, 250, 255, 0.92);
+  border-color: rgba(34, 211, 238, 0.18);
+}
+
+html[data-theme='midnight'] .weather-map .leaflet-control-zoom {
+  box-shadow: 0 12px 32px rgba(8, 15, 32, 0.48);
+}
+
+html[data-theme='midnight'] .weather-pin::before {
+  background: linear-gradient(180deg, rgba(34, 211, 238, 0.96), rgba(56, 189, 248, 0.82));
+  box-shadow:
+    0 12px 26px rgba(34, 211, 238, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.85);
+}
+
+html[data-theme='midnight'] .weather-pin.is-selected::before {
+  background: linear-gradient(180deg, rgba(45, 212, 191, 0.98), rgba(34, 197, 94, 0.9));
+  box-shadow:
+    0 14px 30px rgba(45, 212, 191, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+html[data-theme='midnight'] .weather-pin-core {
+  background: rgba(2, 6, 23, 0.88);
+  border-color: rgba(204, 251, 241, 0.9);
+}
+
+html[data-theme='midnight'] .weather-pin-tooltip .leaflet-tooltip-content > div {
+  background: rgba(2, 6, 23, 0.78);
+  border-color: rgba(34, 211, 238, 0.22);
+}
+
+html[data-theme='midnight'] .weather-pin-tooltip.is-selected .leaflet-tooltip-content > div {
+  background: rgba(8, 47, 73, 0.92);
+  border-color: rgba(103, 232, 249, 0.32);
+}
+
+html[data-theme='aurora'] .weather-map .leaflet-control-attribution,
+html[data-theme='aurora'] .weather-map .leaflet-control-zoom a {
+  background: rgba(1, 31, 27, 0.64);
+  color: rgba(220, 255, 248, 0.92);
+  border-color: rgba(94, 234, 212, 0.18);
+}
+
+html[data-theme='aurora'] .weather-map .leaflet-control-zoom {
+  box-shadow: 0 12px 32px rgba(1, 31, 27, 0.36);
+}
+
+html[data-theme='aurora'] .weather-pin::before {
+  background: linear-gradient(180deg, rgba(94, 234, 212, 0.98), rgba(52, 211, 153, 0.86));
+  box-shadow:
+    0 12px 28px rgba(45, 212, 191, 0.26),
+    inset 0 1px 0 rgba(255, 255, 255, 0.88);
+}
+
+html[data-theme='aurora'] .weather-pin.is-selected::before {
+  background: linear-gradient(180deg, rgba(167, 243, 208, 0.98), rgba(59, 130, 246, 0.9));
+  box-shadow:
+    0 14px 30px rgba(56, 189, 248, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.92);
+}
+
+html[data-theme='aurora'] .weather-pin-core {
+  background: rgba(1, 31, 27, 0.88);
+  border-color: rgba(209, 250, 229, 0.92);
+}
+
+html[data-theme='aurora'] .weather-pin-tooltip .leaflet-tooltip-content > div {
+  background: rgba(1, 31, 27, 0.74);
+  border-color: rgba(94, 234, 212, 0.22);
+}
+
+html[data-theme='aurora'] .weather-pin-tooltip.is-selected .leaflet-tooltip-content > div {
+  background: rgba(8, 47, 73, 0.82);
+  border-color: rgba(110, 231, 183, 0.34);
+}
+
+html[data-theme='sunlit'] .weather-map .leaflet-control-attribution,
+html[data-theme='sunlit'] .weather-map .leaflet-control-zoom a {
+  background: rgba(255, 248, 236, 0.72);
+  color: rgba(106, 67, 21, 0.92);
+  border-color: rgba(217, 164, 75, 0.18);
+}
+
+html[data-theme='sunlit'] .weather-map .leaflet-control-zoom {
+  box-shadow: 0 12px 30px rgba(106, 67, 21, 0.12);
+}
+
+html[data-theme='sunlit'] .weather-pin::before {
+  background: linear-gradient(180deg, rgba(255, 216, 102, 0.98), rgba(245, 158, 11, 0.88));
+  box-shadow:
+    0 12px 28px rgba(245, 158, 11, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+html[data-theme='sunlit'] .weather-pin.is-selected::before {
+  background: linear-gradient(180deg, rgba(255, 244, 173, 0.98), rgba(251, 191, 36, 0.92));
+  box-shadow:
+    0 14px 30px rgba(250, 204, 21, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.94);
+}
+
+html[data-theme='sunlit'] .weather-pin-core {
+  background: rgba(106, 67, 21, 0.88);
+  border-color: rgba(255, 251, 235, 0.92);
+}
+
+html[data-theme='sunlit'] .weather-pin-tooltip .leaflet-tooltip-content > div {
+  background: rgba(255, 248, 236, 0.9);
+  border-color: rgba(217, 164, 75, 0.24);
+  color: rgba(106, 67, 21, 0.98);
+}
+
+html[data-theme='sunlit'] .weather-pin-tooltip.is-selected .leaflet-tooltip-content > div {
+  background: rgba(255, 241, 211, 0.96);
+  border-color: rgba(245, 158, 11, 0.26);
+}
+
+html[data-theme='glass-coast'] .weather-map .leaflet-control-attribution,
+html[data-theme='glass-coast'] .weather-map .leaflet-control-zoom a {
+  background: rgba(4, 27, 42, 0.5);
+  color: rgba(236, 250, 255, 0.9);
+  border-color: rgba(173, 226, 244, 0.18);
+}
+
+html[data-theme='glass-coast'] .weather-map .leaflet-control-zoom {
+  box-shadow: 0 12px 30px rgba(4, 27, 42, 0.24);
+}
+
+html[data-theme='glass-coast'] .weather-pin::before {
+  background: linear-gradient(180deg, rgba(191, 247, 255, 0.98), rgba(127, 198, 226, 0.88));
+  box-shadow:
+    0 12px 28px rgba(127, 198, 226, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.92);
+}
+
+html[data-theme='glass-coast'] .weather-pin.is-selected::before {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(173, 226, 244, 0.92));
+  box-shadow:
+    0 14px 30px rgba(173, 226, 244, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.96);
+}
+
+html[data-theme='glass-coast'] .weather-pin-core {
+  background: rgba(4, 27, 42, 0.86);
+  border-color: rgba(236, 250, 255, 0.92);
+}
+
+html[data-theme='glass-coast'] .weather-pin-tooltip .leaflet-tooltip-content > div {
+  background: rgba(4, 27, 42, 0.62);
+  border-color: rgba(173, 226, 244, 0.22);
+}
+
+html[data-theme='glass-coast'] .weather-pin-tooltip.is-selected .leaflet-tooltip-content > div {
+  background: rgba(7, 40, 58, 0.8);
+  border-color: rgba(191, 247, 255, 0.3);
+}
+
+html[data-theme='nordic-calm'] .weather-map .leaflet-control-attribution,
+html[data-theme='nordic-calm'] .weather-map .leaflet-control-zoom a {
+  background: rgba(255, 255, 255, 0.78);
+  color: rgba(62, 74, 84, 0.95);
+  border-color: rgba(159, 176, 188, 0.2);
+}
+
+html[data-theme='nordic-calm'] .weather-map .leaflet-control-zoom {
+  box-shadow: 0 12px 30px rgba(87, 105, 119, 0.12);
+}
+
+html[data-theme='nordic-calm'] .weather-pin::before {
+  background: linear-gradient(180deg, rgba(248, 250, 252, 0.98), rgba(203, 213, 225, 0.92));
+  box-shadow:
+    0 12px 24px rgba(148, 163, 184, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.94);
+}
+
+html[data-theme='nordic-calm'] .weather-pin.is-selected::before {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(191, 219, 254, 0.95));
+  box-shadow:
+    0 14px 28px rgba(148, 163, 184, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.96);
+}
+
+html[data-theme='nordic-calm'] .weather-pin-core {
+  background: rgba(51, 65, 85, 0.9);
+  border-color: rgba(255, 255, 255, 0.95);
+}
+
+html[data-theme='nordic-calm'] .weather-pin-tooltip .leaflet-tooltip-content > div {
+  background: rgba(255, 255, 255, 0.88);
+  border-color: rgba(159, 176, 188, 0.22);
+  color: rgba(51, 65, 85, 0.98);
+}
+
+html[data-theme='nordic-calm'] .weather-pin-tooltip.is-selected .leaflet-tooltip-content > div {
+  background: rgba(241, 245, 249, 0.96);
+  border-color: rgba(148, 163, 184, 0.28);
+}
+
+html[data-theme='solar-pulse'] .weather-map .leaflet-control-attribution,
+html[data-theme='solar-pulse'] .weather-map .leaflet-control-zoom a {
+  background: rgba(120, 45, 0, 0.62);
+  color: rgba(255, 247, 237, 0.94);
+  border-color: rgba(253, 186, 116, 0.18);
+}
+
+html[data-theme='solar-pulse'] .weather-map .leaflet-control-zoom {
+  box-shadow: 0 12px 30px rgba(120, 45, 0, 0.18);
+}
+
+html[data-theme='solar-pulse'] .weather-pin::before {
+  background: linear-gradient(180deg, rgba(255, 237, 112, 0.98), rgba(251, 146, 60, 0.9));
+  box-shadow:
+    0 12px 28px rgba(251, 146, 60, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.94);
+}
+
+html[data-theme='solar-pulse'] .weather-pin.is-selected::before {
+  background: linear-gradient(180deg, rgba(255, 250, 200, 0.98), rgba(249, 115, 22, 0.94));
+  box-shadow:
+    0 14px 30px rgba(251, 146, 60, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.96);
+}
+
+html[data-theme='solar-pulse'] .weather-pin-core {
+  background: rgba(120, 45, 0, 0.9);
+  border-color: rgba(255, 247, 237, 0.92);
+}
+
+html[data-theme='solar-pulse'] .weather-pin-tooltip .leaflet-tooltip-content > div {
+  background: rgba(120, 45, 0, 0.68);
+  border-color: rgba(253, 186, 116, 0.24);
+  color: rgba(255, 247, 237, 0.98);
+}
+
+html[data-theme='solar-pulse'] .weather-pin-tooltip.is-selected .leaflet-tooltip-content > div {
+  background: rgba(154, 52, 18, 0.84);
+  border-color: rgba(251, 146, 60, 0.3);
 }
 
 .weather-pin {
