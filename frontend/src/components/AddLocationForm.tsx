@@ -53,7 +53,7 @@ export function AddLocationForm() {
       <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-white/60">
         New coordinate
       </p>
-      <div className="grid grid-cols-2 gap-2">
+      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
         <label className="grid gap-1">
           <span className="text-[11px] text-white/60">Latitude</span>
           <input
@@ -63,7 +63,7 @@ export function AddLocationForm() {
             onChange={(e) => setLatitude(e.target.value)}
             placeholder="1.3508"
             required
-            className="rounded-md border border-white/15 bg-white/10 px-2 py-1.5 text-sm text-white placeholder:text-white/40"
+            className="w-full rounded-md border border-white/15 bg-white/10 px-2 py-1.5 text-sm text-white placeholder:text-white/40"
           />
         </label>
         <label className="grid gap-1">
@@ -75,7 +75,7 @@ export function AddLocationForm() {
             onChange={(e) => setLongitude(e.target.value)}
             placeholder="103.8390"
             required
-            className="rounded-md border border-white/15 bg-white/10 px-2 py-1.5 text-sm text-white placeholder:text-white/40"
+            className="w-full rounded-md border border-white/15 bg-white/10 px-2 py-1.5 text-sm text-white placeholder:text-white/40"
           />
         </label>
       </div>
