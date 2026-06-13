@@ -63,9 +63,7 @@ const ThemeContext = createContext<ThemeContextValue | null>(null);
 const storageKey = 'weather-starter-theme';
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setTheme] = useState<ThemeName>('apple');
-
-  useEffect(() => {
+  const [theme, setTheme] = useState<ThemeName>(() => {
     const stored = window.localStorage.getItem(storageKey);
     if (
       stored === 'apple' ||
@@ -76,9 +74,10 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       stored === 'nordic-calm' ||
       stored === 'solar-pulse'
     ) {
-      setTheme(stored);
+      return stored;
     }
-  }, []);
+    return 'apple';
+  });
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;

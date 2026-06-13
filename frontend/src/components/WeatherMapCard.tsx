@@ -145,7 +145,8 @@ function MapScene({
   const center = useMemo<[number, number]>(() => {
     if (locations.length === 0) return singaporeCenter;
 
-    const latitude = locations.reduce((sum, location) => sum + location.latitude, 0) / locations.length;
+    const latitude =
+      locations.reduce((sum, location) => sum + location.latitude, 0) / locations.length;
     const longitude =
       locations.reduce((sum, location) => sum + location.longitude, 0) / locations.length;
     return [latitude, longitude];

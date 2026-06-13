@@ -151,4 +151,3 @@ Run the backend in watch mode with `tsx`.
 - `WEATHER_API_KEY` is optional and can be exported locally if needed.
 - `DATABASE_PATH` can override the default SQLite file location.
 - `PORTLESS_HTTPS=1` enables HTTPS in the Portless dev flow if a feature needs secure context.
-

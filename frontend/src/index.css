@@ -124,12 +124,7 @@ input:focus-visible {
 }
 
 .weather-map {
-  font-family:
-    "SF Pro Display",
-    "SF Pro Text",
-    ui-sans-serif,
-    system-ui,
-    sans-serif;
+  font-family: 'SF Pro Display', 'SF Pro Text', ui-sans-serif, system-ui, sans-serif;
 }
 
 .weather-map .leaflet-control-attribution,
@@ -432,7 +427,7 @@ html[data-theme='solar-pulse'] .weather-pin-tooltip.is-selected .leaflet-tooltip
 }
 
 .weather-pin::before {
-  content: "";
+  content: '';
   position: absolute;
   top: 1px;
   left: 50%;
@@ -447,7 +442,7 @@ html[data-theme='solar-pulse'] .weather-pin-tooltip.is-selected .leaflet-tooltip
 }
 
 .weather-pin::after {
-  content: "";
+  content: '';
   position: absolute;
   bottom: 1px;
   left: 50%;

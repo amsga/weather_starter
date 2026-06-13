@@ -1,0 +1,10 @@
+node_modules
+frontend/node_modules
+backend/dist
+frontend/dist
+backend/weather.db
+backend/weather.db-wal
+backend/weather.db-shm
+backend/logs
+.git
+.husky

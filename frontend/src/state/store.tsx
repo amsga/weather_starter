@@ -1,10 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useState } from 'react';
-import {
-  listLocations,
-  createLocation,
-  refreshLocation,
-  logInteraction,
-} from '../api';
+import { listLocations, createLocation, refreshLocation, logInteraction } from '../api';
 import type { CreateLocationPayload, Location, ProviderProps, StoreValue } from '../types';
 
 const StoreContext = createContext<StoreValue | null>(null);
@@ -77,7 +72,7 @@ export function StoreProvider({ children }: ProviderProps) {
       logInteraction('location_delete_submitted', { locationId: id });
       try {
         await fetch(`/api/locations/${id}`, { method: 'DELETE' });
-        const next = await load();
+        await load();
         // if deleted location was selected, clear selection (effectiveSelectedId will handle)
         if (selectedId === id) setSelectedId(null);
         logInteraction('location_deleted', { locationId: id });

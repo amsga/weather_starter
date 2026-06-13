@@ -627,7 +627,6 @@ function valueForRegion(
   return numberOrNull(values[region]);
 }
 
-
 function defaultRegions(): RegionMetadata[] {
   return [
     { name: 'west', labelLocation: { latitude: 1.35735, longitude: 103.7 } },

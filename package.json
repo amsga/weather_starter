@@ -9,6 +9,8 @@
     "build": "npm run build -w frontend && tsc -p backend/tsconfig.json",
     "start": "node scripts/start.mjs",
     "doctor": "node scripts/doctor.mjs",
+    "format": "prettier --write \"frontend/**/*\" \"backend/**/*\" \"scripts/**/*\" \"*.json\" \"*.md\" \"*.mjs\" \"*.ts\" --ignore-unknown",
+    "lint": "eslint \"frontend/src/**/*.{ts,tsx}\" \"frontend/*.config.{js,ts,mjs}\" \"backend/src/**/*.{ts,tsx}\" \"scripts/**/*.{js,mjs,ts}\" \"*.ts\" \"*.mjs\" --ignore-pattern \"frontend/dist/**\" --ignore-pattern \"backend/dist/**\" --ignore-pattern \"backend/drizzle/meta/**\"",
     "reset": "node scripts/reset.mjs",
     "test": "NODE_OPTIONS=--disable-warning=ExperimentalWarning vitest run",
     "test:watch": "NODE_OPTIONS=--disable-warning=ExperimentalWarning vitest",
