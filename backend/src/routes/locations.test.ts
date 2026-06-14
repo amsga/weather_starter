@@ -1,8 +1,8 @@
 import { mkdtemp, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import request from 'supertest';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { invokeJson } from '../test-utils.js';
 import type { WeatherSnapshot } from '../weather.js';
 
 const weather: WeatherSnapshot = {
@@ -54,12 +54,14 @@ describe('locations API', () => {
   });
 
   it('refreshes weather when a location is created', async () => {
-    const response = await request(app)
-      .post('/api/locations')
-      .send({ latitude: 1.35, longitude: 103.85 })
-      .expect(201);
+    const { status, body } = await invokeJson(app, {
+      method: 'POST',
+      path: '/api/locations',
+      body: { latitude: 1.35, longitude: 103.85 },
+    });
 
-    expect(response.body).toMatchObject({
+    expect(status).toBe(201);
+    expect(body).toMatchObject({
       id: 1,
       latitude: 1.35,
       longitude: 103.85,
@@ -70,8 +72,13 @@ describe('locations API', () => {
       },
     });
 
-    const listResponse = await request(app).get('/api/locations').expect(200);
-    expect(listResponse.body.locations).toHaveLength(1);
-    expect(listResponse.body.locations[0].weather.condition).toBe('Cloudy');
+    const listResponse = await invokeJson(app, {
+      method: 'GET',
+      path: '/api/locations',
+    });
+    expect(listResponse.status).toBe(200);
+    const listBody = listResponse.body as { locations: Array<{ weather: { condition: string } }> };
+    expect(listBody.locations).toHaveLength(1);
+    expect(listBody.locations[0].weather.condition).toBe('Cloudy');
   });
 });
