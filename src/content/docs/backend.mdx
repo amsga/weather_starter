@@ -1,0 +1,64 @@
+---
+title: Backend
+description: Express routes, SQLite storage, and Singapore weather ingestion.
+---
+
+The backend is responsible for all data validation, persistence, and upstream weather calls.
+
+## Entry point
+
+[`backend/src/server.ts`](/Users/gerard/Projects/weather_starter/backend/src/server.ts) creates the Express app, mounts request logging, exposes `/health` and `/api/logs`, and mounts the locations router under `/api`.
+
+In development, the same server also mounts Vite middleware so the frontend and backend run together.
+
+## Routes
+
+[`backend/src/routes/locations.ts`](/Users/gerard/Projects/weather_starter/backend/src/routes/locations.ts) exposes:
+
+- `GET /api/locations`
+- `POST /api/locations`
+- `GET /api/locations/:locationId`
+- `POST /api/locations/:locationId/refresh`
+- `DELETE /api/locations/:locationId`
+
+### Validation
+
+- Coordinates must be numeric.
+- New locations must fall within the Singapore bounding box enforced by the router.
+- Duplicate latitude and longitude pairs are rejected.
+- Weather provider failures during create fall back to storing the location without a fresh snapshot.
+
+## Persistence
+
+[`backend/src/db.ts`](/Users/gerard/Projects/weather_starter/backend/src/db.ts) owns the SQLite connection, migration startup, and CRUD helpers.
+
+- Rows are stored in `backend/weather.db` by default.
+- The `locations` table uses Drizzle and includes a uniqueness constraint on latitude and longitude.
+- Snapshot data is stored directly in columns, with forecast arrays serialized as JSON columns.
+
+## Weather provider
+
+[`backend/src/weather.ts`](/Users/gerard/Projects/weather_starter/backend/src/weather.ts) aggregates several Singapore government endpoints into one normalized snapshot:
+
+- Two-hour forecast
+- Realtime temperature, humidity, rainfall, wind speed, and wind direction readings
+- UV index
+- PSI and PM2.5 readings
+- 24-hour forecast
+- Four-day forecast
+
+The client merges the latest available values into one `WeatherSnapshot` shape for the UI.
+
+## Error handling and logging
+
+- `/api/logs` accepts frontend interaction events and writes them through Pino.
+- Route errors are centralized in the Express error handler.
+- Provider errors are translated into HTTP failures where appropriate, or degraded gracefully during create.
+
+## Data model
+
+[`backend/src/schema.ts`](/Users/gerard/Projects/weather_starter/backend/src/schema.ts) defines the persisted shape.
+
+- `created_at` tracks when a location was added.
+- Weather snapshot fields are stored alongside the location for easy dashboard reads.
+- `forecast_periods` and `daily_forecast` are JSON arrays.

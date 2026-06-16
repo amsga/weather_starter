@@ -1,0 +1,32 @@
+---
+title: Development
+description: Useful scripts and repo conventions for working on Weather Starter.
+---
+
+## Common commands
+
+- `npm run dev` starts the combined frontend/backend development flow.
+- `npm run docs` starts the Starlight docs site.
+- `npm run build` builds the frontend and compiles the backend.
+- `npm test` runs the Vitest suite.
+- `npm run doctor` checks the service health endpoints.
+- `npm run reset` clears the local SQLite database and WAL files.
+
+## Environment
+
+- `WEATHER_API_KEY` is optional.
+- `DATABASE_PATH` overrides the SQLite location.
+- `PORTLESS_HTTPS=1` enables HTTPS in the Portless dev flow.
+
+## Repo conventions
+
+- Keep API orchestration in `frontend/src/state/store.tsx`.
+- Keep request logic in `frontend/src/api.ts`.
+- Update the backend router and DB helpers together when API behavior changes.
+- Use `/api/*` from the frontend instead of hard-coding server ports.
+
+## Useful references
+
+- [`package.json`](/Users/gerard/Projects/weather_starter/package.json)
+- [`backend/src/server.ts`](/Users/gerard/Projects/weather_starter/backend/src/server.ts)
+- [`frontend/src/state/store.tsx`](/Users/gerard/Projects/weather_starter/frontend/src/state/store.tsx)

@@ -6,6 +6,7 @@
   "scripts": {
     "prepare": "husky",
     "dev": "node scripts/dev.mjs",
+    "docs": "ASTRO_TELEMETRY_DISABLED=1 astro dev",
     "build": "npm run build -w frontend && tsc -p backend/tsconfig.json",
     "start": "node scripts/start.mjs",
     "doctor": "node scripts/doctor.mjs",
@@ -22,13 +23,18 @@
     "backend"
   ],
   "dependencies": {
+    "@astrojs/starlight": "^0.36.0",
     "@vitejs/plugin-react": "^5.1.4",
+    "astro": "^5.14.0",
+    "astro-mermaid": "^2.0.2",
     "dotenv": "^17.4.2",
     "drizzle-orm": "^0.45.2",
     "express": "^4.19.2",
+    "mermaid": "^11.12.0",
     "pino": "^10.3.1",
     "pino-http": "^11.0.0",
     "portless": "^0.12.0",
+    "sharp": "^0.34.0",
     "vite": "^7.3.1"
   },
   "devDependencies": {

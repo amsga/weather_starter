@@ -1,0 +1,64 @@
+---
+title: Architecture
+description: How the frontend, backend, storage, and weather provider fit together.
+---
+
+Weather Starter uses a small number of well-defined layers:
+
+- A browser UI built with React.
+- An Express server that handles every `/api/*` request.
+- SQLite for persisted locations and snapshot data.
+- The Singapore weather API as the upstream data source.
+
+## Request path
+
+```mermaid
+sequenceDiagram
+  actor User
+  participant UI as Frontend
+  participant API as Express API
+  participant DB as SQLite
+  participant WX as Singapore weather API
+
+  User->>UI: Add or refresh a location
+  UI->>API: POST /api/locations or /refresh
+  API->>DB: Insert or load location row
+  API->>WX: Fetch latest weather data
+  WX-->>API: Weather snapshot
+  API->>DB: Persist snapshot
+  API-->>UI: Updated location record
+  UI-->>User: Render fresh weather state
+```
+
+## System boundaries
+
+```mermaid
+flowchart TB
+  subgraph Browser
+    UI[React app]
+    Store[State store]
+    Components[Dashboard components]
+    UI --> Store
+    Store --> Components
+  end
+
+  subgraph Server
+    Server[Express app]
+    Routes[Locations router]
+    DB[SQLite helpers]
+    Weather[SingaporeWeatherClient]
+    Server --> Routes
+    Routes --> DB
+    Routes --> Weather
+  end
+
+  Browser <-->|/api/*| Server
+  DB --> SQLite[(weather.db)]
+```
+
+## Design notes
+
+- The browser never talks to the weather provider directly.
+- The server refreshes weather during create and refresh operations so the UI always receives a snapshot record.
+- The SQLite row shape mirrors the weather snapshot, which keeps the read path simple for the frontend.
+- Logging is split between request logs, application logs, and frontend interaction events sent to `/api/logs`.
